@@ -1,394 +1,128 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="id">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MQTT Data Display</title>
-    <style>
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            grid-gap: 10px;
-            margin-top: 20px;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Admin</title>
+  <style>
+    /* Reset dasar */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
 
-        .data-item {
-            border: 1px solid #ccc;
-            padding: 10px;
-        }
+    body {
+      display: flex;
+      min-height: 100vh;
+      background: #f4f6fa;
+    }
 
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
+    /* Sidebar */
+    .sidebar {
+      width: 240px;
+      background: #1e293b;
+      color: white;
+      padding-top: 20px;
+      position: fixed;
+      height: 100%;
+    }
 
-        th,
-        td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
+    .sidebar h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 22px;
+      letter-spacing: 1px;
+    }
 
-        th {
-            background-color: #f2f2f2;
-        }
+    .sidebar ul {
+      list-style: none;
+    }
 
-        /* Style for custom file input button */
-        #importBtn {
-            display: none;
-        }
+    .sidebar ul li {
+      padding: 15px 20px;
+      border-left: 4px solid transparent;
+      transition: 0.3s;
+    }
 
-        .import-button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+    .sidebar ul li:hover {
+      background: #334155;
+      border-left: 4px solid #38bdf8;
+    }
 
-        .button-custom {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+    .sidebar ul li a {
+      color: white;
+      text-decoration: none;
+      display: block;
+      font-size: 16px;
+    }
 
-        .import-button:active,
-        .import-button:focus {
-            outline: none;
-            box-shadow: none;
-        }
-    </style>
+    /* Konten utama */
+    .main-content {
+      margin-left: 240px;
+      padding: 20px;
+      width: calc(100% - 240px);
+    }
+
+    .header {
+      background: white;
+      padding: 15px 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+
+    .header h1 {
+      font-size: 20px;
+      color: #1e293b;
+    }
+
+    .content {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .content h2 {
+      color: #1e293b;
+      margin-bottom: 10px;
+    }
+
+    .content p {
+      color: #475569;
+      line-height: 1.6;
+    }
+  </style>
 </head>
-
 <body>
-    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
-    <div>
-        <h1>INCUBATOR ANALYZER</h1>
-        <button id="toggleBtn" class="button-custom">Start Saving Data</button>
-        <button id="resetBtn" class="button-custom">Reset Data</button>
-        <button id="exportBtn" class="button-custom">Export Data</button>
-        <input type="file" id="importBtn" accept=".csv" class="import-button" />
-        <label for="importBtn" class="import-button">Import Data</label>
-        <label for="timerInput">Set Timer (hh:mm:ss):</label>
-        <input type="text" id="timerInput" placeholder="00:05:00" />
-        <div id="timerDisplay"></div>
-        <div class="grid-container" id="dataGrid">
-            <div class="data-item" data-label="T1">T1 = 0 °C</div>
-            <div class="data-item" data-label="T2">T2 = 0 °C</div>
-            <div class="data-item" data-label="T3">T3 = 0 °C</div>
-            <div class="data-item" data-label="T4">T4 = 0 °C</div>
-            <div class="data-item" data-label="T5">T5 = 0 °C</div>
-            <div class="data-item" data-label="TM">TM = 0 °C</div>
-            <div class="data-item" data-label="RH">RH = 0 %</div>
-            <div class="data-item" data-label="FLOW">FLOW = 0 m/s</div>
-            <div class="data-item" data-label="NOISE">NOISE = 0 dB</div>
-        </div>
-        <br />
-        <h2>Saved Data Table</h2>
-        <table id="dataTable">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Time</th>
-                    <th>T1</th>
-                    <th>T2</th>
-                    <th>T3</th>
-                    <th>T4</th>
-                    <th>T5</th>
-                    <th>TM</th>
-                    <th>RH</th>
-                    <th>FLOW</th>
-                    <th>NOISE</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Saved data will be displayed here -->
-            </tbody>
-        </table>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>Admin Panel</h2>
+    <ul>
+      <li><a href="dashboard.html">🏠 Dashboard</a></li>
+      <li><a href="data-siswa.html">👨‍🎓 Data Siswa</a></li>
+      <li><a href="absensi.html">🗓️ Absensi</a></li>
+      <li><a href="rekap.html">📊 Rekap</a></li>
+      <li><a href="pengaturan.html">⚙️ Pengaturan</a></li>
+      <li><a href="logout.html">🚪 Logout</a></li>
+    </ul>
+  </div>
+
+  <!-- Konten Utama -->
+  <div class="main-content">
+    <div class="header">
+      <h1>Selamat Datang di Dashboard Admin</h1>
     </div>
-    <script>
-        const topic = "esp32/bismillah";
-        let savingData = false;
-        let tableData = [];
-        let timerSeconds = 0;
-        let timerInterval;
 
-        const timerDisplay = document.getElementById("timerDisplay");
-
-        function startTimer() {
-            const input = document.getElementById("timerInput").value;
-            const [hours, minutes, seconds] = input.split(":").map(Number);
-            timerSeconds = hours * 3600 + minutes * 60 + seconds;
-
-            timerInterval = setInterval(() => {
-                timerSeconds--;
-                if (timerSeconds <= 0) {
-                    clearInterval(timerInterval);
-                    savingData = false;
-                    document.getElementById("toggleBtn").textContent =
-                        "Start Saving Data";
-                }
-                displayTimer();
-            }, 1000);
-        }
-
-        function displayTimer() {
-            if (timerSeconds >= 0) {
-                const hours = Math.floor(timerSeconds / 3600);
-                const minutes = Math.floor((timerSeconds % 3600) / 60);
-                const seconds = timerSeconds % 60;
-                timerDisplay.textContent = `Timer: ${hours
-                    .toString()
-                    .padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds
-                        .toString()
-                        .padStart(2, "0")}`;
-            } else {
-                timerDisplay.textContent = "Timer: 00:00:00";
-            }
-        }
-
-        function updateDisplay(data) {
-            const dataArray = data.split(",");
-            const dataGridItems = document.querySelectorAll(".data-item");
-            const dataTableBody = document.querySelector("#dataTable tbody");
-
-            dataGridItems.forEach((item) => (item.textContent = ""));
-
-            const options = {
-                day: 'numeric',
-                month: 'numeric',
-                year: 'numeric',
-                hour: 'numeric',
-                minute: 'numeric',
-                second: 'numeric',
-                hour12: false, // Use 24-hour format
-            };
-
-            let newData = { timestamp: new Date().toLocaleString('en-US', options) };
-
-            dataArray.forEach((item) => {
-                const [label, value] = item.split("=");
-                let unit = "";
-
-                switch (label) {
-                    case "T1":
-                    case "T2":
-                    case "T3":
-                    case "T4":
-                    case "T5":
-                    case "TM":
-                        unit = "°C";
-                        break;
-                    case "RH":
-                        unit = "%";
-                        break;
-                    case "FLOW":
-                        unit = "m/s";
-                        break;
-                    case "NOISE":
-                        unit = "dB";
-                        break;
-                    default:
-                        break;
-                }
-
-                const dataItem = document.querySelector(
-                    `.data-item[data-label="${label}"]`
-                );
-                if (dataItem) {
-                    dataItem.textContent = `${label} = ${value} ${unit}`;
-                }
-
-                if (savingData) {
-                    newData[label] = parseFloat(value);
-                }
-            });
-
-            if (savingData) {
-                tableData.push(newData);
-                displayTable();
-            }
-        }
-
-        function displayTable() {
-            const dataTableBody = document.querySelector("#dataTable tbody");
-            dataTableBody.innerHTML = "";
-            tableData.forEach((data) => {
-                const row = document.createElement("tr");
-
-                const options = {
-                    day: 'numeric',
-                    month: 'numeric',
-                    year: 'numeric',
-                    hour: 'numeric',
-                    minute: 'numeric',
-                    second: 'numeric',
-                    hour12: false // Use 24-hour format
-                };
-
-                const timestamp = new Date(data.timestamp).toLocaleDateString("en-US", options).toString().split(', ');
-                const date = timestamp[0];
-                const time = timestamp[1];
-
-                const dateCell = document.createElement("td");
-                const timeCell = document.createElement("td");
-                dateCell.textContent = date;
-                timeCell.textContent = time;
-
-                row.appendChild(dateCell);
-                row.appendChild(timeCell);
-
-                for (const key in data) {
-                    if (key !== "timestamp") {
-                        const cell = document.createElement("td");
-                        cell.textContent = data[key];
-                        row.appendChild(cell);
-                    }
-                }
-
-                dataTableBody.appendChild(row);
-            });
-
-            localStorage.setItem("tableData", JSON.stringify(tableData));
-        }
-
-        window.onload = function () {
-            const storedData = localStorage.getItem("tableData");
-            if (storedData) {
-                tableData = JSON.parse(storedData);
-                displayTable();
-            }
-        };
-
-        const clientId = "mqttjs_" + Math.random().toString(16).substr(2, 8);
-        const host = "wss://broker.emqx.io:8084/mqtt";
-        const options = {
-            keepalive: 60,
-            clientId: clientId,
-            protocolId: "MQTT",
-            protocolVersion: 4,
-            clean: true,
-            reconnectPeriod: 1000,
-            connectTimeout: 30 * 1000,
-            will: {
-                topic: "WillMsg",
-                payload: "Connection Closed abnormally..!",
-                qos: 0,
-                retain: false,
-            },
-        };
-
-        const client = mqtt.connect(host, options);
-        client.on("connect", () => {
-            client.subscribe(topic, () => {
-                console.log("Subscribed to topic:", topic);
-            });
-        });
-
-        client.on("message", (topic, message) => {
-            updateDisplay(message.toString());
-        });
-
-        document.getElementById("toggleBtn").addEventListener("click", () => {
-            savingData = !savingData;
-            if (savingData) {
-                startTimer();
-                document.getElementById("toggleBtn").textContent =
-                    "Stop Saving Data";
-            } else {
-                clearInterval(timerInterval);
-                document.getElementById("toggleBtn").textContent =
-                    "Start Saving Data";
-            }
-        });
-
-        document.getElementById("resetBtn").addEventListener("click", () => {
-            tableData = [];
-            displayTable();
-        });
-
-        document.getElementById("exportBtn").addEventListener("click", () => {
-            const csvContent = "data:text/csv;charset=utf-8," + convertTableToCSV();
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "data.csv");
-            document.body.appendChild(link);
-            link.click();
-        });
-
-        document.getElementById("importBtn").addEventListener("change", (event) => {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const csvData = e.target.result;
-                    parseCSVData(csvData);
-                };
-                reader.readAsText(file);
-            }
-        });
-
-        function parseCSVData(csvData) {
-            const rows = csvData.split("\n");
-            const importedData = [];
-            rows.forEach((row) => {
-                const [date, time, ...values] = row.split(",");
-                const dataObj = { timestamp: `${date}, ${time}` };
-
-                const labels = ["T1", "T2", "T3", "T4", "T5", "TM", "RH", "FLOW", "NOISE"];
-                labels.forEach((label, index) => {
-                    dataObj[label] = parseFloat(values[index]);
-                });
-
-                importedData.push(dataObj);
-            });
-
-            tableData = importedData;
-            displayTable();
-        }
-
-        function convertTableToCSV() {
-            const headers = [
-                "Date",
-                "Time",
-                "T1",
-                "T2",
-                "T3",
-                "T4",
-                "T5",
-                "TM",
-                "RH",
-                "FLOW",
-                "NOISE",
-            ];
-            const rows = [headers.join(",")];
-
-            tableData.forEach((data) => {
-                const row = [
-                    new Date(data.timestamp).toLocaleDateString(),
-                    new Date(data.timestamp).toLocaleTimeString(),
-                    data.T1,
-                    data.T2,
-                    data.T3,
-                    data.T4,
-                    data.T5,
-                    data.TM,
-                    data.RH,
-                    data.FLOW,
-                    data.NOISE,
-                ];
-                rows.push(row.join(","));
-            });
-
-            return rows.join("\n");
-        }
-    </script>
+    <div class="content">
+      <h2>Informasi Umum</h2>
+      <p>
+        Ini adalah tampilan utama admin. Silakan pilih menu di sebelah kiri
+        untuk mengakses halaman data siswa, absensi, rekap, dan pengaturan lainnya.
+      </p>
+    </div>
+  </div>
 </body>
-
 </html>
