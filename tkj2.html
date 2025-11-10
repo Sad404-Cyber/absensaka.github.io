@@ -149,12 +149,12 @@
             displayTable();
 
             // Reset form
-            clearForm();
-        });
+           // clearForm();
+      //  });
 
         // Fungsi bersihkan form
         function clearForm() {
-            document.getElementById('attendanceForm').reset();
+            document.getElementById('emptyMessage').reset();
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('tanggal').value = today;
         }
