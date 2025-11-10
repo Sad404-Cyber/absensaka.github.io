@@ -7,80 +7,97 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f4f6f8;
+      background: #f7f9fc;
       margin: 0;
       padding: 20px;
     }
     h1 {
       text-align: center;
-      color: #333;
+      color: #222;
     }
     .container {
-      max-width: 800px;
-      margin: 20px auto;
+      max-width: 850px;
       background: white;
-      padding: 20px;
+      margin: 20px auto;
+      padding: 25px;
       border-radius: 10px;
       box-shadow: 0 3px 10px rgba(0,0,0,0.1);
     }
-    input, select, button {
+    select, button {
       padding: 10px;
+      font-size: 15px;
       margin: 5px;
-      font-size: 14px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
     }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-    table, th, td {
-      border: 1px solid #ddd;
-    }
-    th {
-      background-color: #007bff;
-      color: white;
-    }
-    th, td {
-      padding: 8px;
-      text-align: center;
+    button {
+      cursor: pointer;
+      border: none;
     }
     .btn {
       background-color: #007bff;
       color: white;
-      border: none;
-      cursor: pointer;
-      border-radius: 5px;
     }
     .btn:hover {
       background-color: #0056b3;
     }
     .btn-reset {
       background-color: #dc3545;
+      color: white;
     }
     .btn-reset:hover {
       background-color: #b02a37;
     }
     .btn-export {
       background-color: #28a745;
+      color: white;
     }
     .btn-export:hover {
       background-color: #1c7c31;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background-color: #007bff;
+      color: white;
+    }
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>📋 Absensi Siswa Sekolah</h1>
+    <h1>ABSENSI SEKOLAH SISWA/SISWI KELAS TKJ 1</h1>
 
     <div>
-      <input type="text" id="nama" placeholder="Masukkan nama siswa">
+      <label for="nama">Nama Siswa:</label>
+      <select id="nama">
+        <option value="">-- Pilih Nama Siswa --</option>
+        <option>ADINDA AYU S</option>
+        <option>APRILLIA ENDAH L</option>
+        <option>ARYA BAGUS P</option>
+        <option>AVRILLIANO DITA L</option>
+        <option>BARITA DWI P</option>
+      </select>
+
+      <label for="status">Status:</label>
       <select id="status">
         <option value="Hadir">Hadir</option>
         <option value="Izin">Izin</option>
         <option value="Sakit">Sakit</option>
         <option value="Alfa">Alfa</option>
       </select>
-      <button class="btn" onclick="tambahData()">Tambah</button>
+
+      <button class="btn" onclick="tambahData()">Tambah Absensi</button>
       <button class="btn-reset" onclick="resetData()">Reset Data</button>
       <button class="btn-export" onclick="exportCSV()">Export CSV</button>
     </div>
@@ -94,8 +111,7 @@
           <th>Waktu</th>
         </tr>
       </thead>
-      <tbody>
-      </tbody>
+      <tbody></tbody>
     </table>
   </div>
 
@@ -118,21 +134,19 @@
     }
 
     function tambahData() {
-      const nama = document.getElementById("nama").value.trim();
+      const nama = document.getElementById("nama").value;
       const status = document.getElementById("status").value;
+
       if (nama === "") {
-        alert("Nama siswa harus diisi!");
+        alert("Silakan pilih nama siswa!");
         return;
       }
 
       const waktu = new Date().toLocaleString("id-ID");
       absensi.push({ nama, status, waktu });
 
-      // Simpan ke localStorage
       localStorage.setItem("absensi", JSON.stringify(absensi));
       renderTable();
-
-      document.getElementById("nama").value = "";
     }
 
     function resetData() {
@@ -164,7 +178,7 @@
       link.click();
     }
 
-    // Render tabel pertama kali
+    // Render tabel saat halaman dibuka
     renderTable();
   </script>
 </body>
