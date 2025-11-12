@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Absensi Siswa Sekolah</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f9fc;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #222;
+    }
+    .container {
+      max-width: 850px;
+      background: white;
+      margin: 20px auto;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+    select, button {
+      padding: 10px;
+      font-size: 15px;
+      margin: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      cursor: pointer;
+      border: none;
+    }
+    .btn {
+      background-color: #007bff;
+      color: white;
+    }
+    .btn:hover {
+      background-color: #0056b3;
+    }
+    .btn-reset {
+      background-color: #dc3545;
+      color: white;
+    }
+    .btn-reset:hover {
+      background-color: #b02a37;
+    }
+    .btn-export {
+      background-color: #28a745;
+      color: white;
+    }
+    .btn-export:hover {
+      background-color: #1c7c31;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background-color: #007bff;
+      color: white;
+    }
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>ABSENSI SEKOLAH SISWA/SISWI KELAS 12 TKR 1</h1>
+
+    <div>
+      <label for="nama">Nama Siswa:</label>
+      <select id="nama">
+        <option value="">-- Pilih Nama Siswa --</option>
+        <option> A </option>
+        <option> B </option>
+        <option> C </option>
+        <option> </option>
+        <option> </option>
+      </select>
+
+      <label for="status">Status:</label>
+      <select id="status">
+        <option value="Hadir">Hadir</option>
+        <option value="Izin">Izin</option>
+        <option value="Sakit">Sakit</option>
+        <option value="Alfa">Alfa</option>
+      </select>
+
+      <button class="btn" onclick="tambahData()">Tambah Absensi</button>
+      <button class="btn-reset" onclick="resetData()">Reset Data</button>
+      <button class="btn-export" onclick="exportCSV()">Export CSV</button>
+    </div>
+
+    <table id="tabelAbsensi">
+      <thead>
+        <tr>
+          <th>No Absen</th>
+          <th>Nama Siswa</th>
+          <th>Status Kehadiran</th>
+          <th>Waktu</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    // Ambil data dari localStorage (jika ada)
+    let absensi = JSON.parse(localStorage.getItem("absensi")) || [];
+
+    function renderTable() {
+      const tbody = document.querySelector("#tabelAbsensi tbody");
+      tbody.innerHTML = "";
+      absensi.forEach((item, index) => {
+        const row = `<tr>
+          <td>${index + 1}</td>
+          <td>${item.nama}</td>
+          <td>${item.status}</td>
+          <td>${item.waktu}</td>
+        </tr>`;
+        tbody.innerHTML += row;
+      });
+    }
+
+    function tambahData() {
+      const nama = document.getElementById("nama").value;
+      const status = document.getElementById("status").value;
+
+      if (nama === "") {
+        alert("Silakan pilih nama siswa!");
+        return;
+      }
+
+      const waktu = new Date().toLocaleString("id-ID");
+      absensi.push({ nama, status, waktu });
+
+      localStorage.setItem("absensi", JSON.stringify(absensi));
+      renderTable();
+    }
+
+    function resetData() {
+      if (confirm("Yakin ingin menghapus semua data absensi?")) {
+        absensi = [];
+        localStorage.removeItem("absensi");
+        renderTable();
+      }
+    }
+
+    function exportCSV() {
+      if (absensi.length === 0) {
+        alert("Belum ada data untuk diexport!");
+        return;
+      }
+
+      let csvContent = "data:text/csv;charset=utf-8,";
+      csvContent += "No,Nama Siswa,Status Kehadiran,Waktu\n";
+
+      absensi.forEach((item, index) => {
+        csvContent += `${index + 1},${item.nama},${item.status},${item.waktu}\n`;
+      });
+
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "12tkr1.csv");
+      document.body.appendChild(link);
+      link.click();
+    }
+
+    // Render tabel saat halaman dibuka
+    renderTable();
+  </script>
+</body>
+</html>
