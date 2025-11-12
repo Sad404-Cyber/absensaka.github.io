@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login / Home - Absensi Siswa</title>
+
+  <style>
+    /* Font modern */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      background: linear-gradient(135deg, #4e54c8, #8f94fb);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+      backdrop-filter: blur(8px);
+      padding: 40px;
+      width: 350px;
+      color: white;
+      text-align: center;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .container:hover {
+      transform: translateY(-5px);
+    }
+
+    h2 {
+      font-size: 1.8em;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+
+    p {
+      font-size: 0.95em;
+      margin-bottom: 25px;
+      opacity: 0.9;
+    }
+
+    .form-group {
+      text-align: left;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-size: 0.9em;
+      font-weight: 500;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: none;
+      margin-top: 5px;
+      outline: none;
+    }
+
+    button {
+      background: #fff;
+      color: #4e54c8;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s ease;
+      width: 100%;
+    }
+
+    button:hover {
+      background: #4e54c8;
+      color: #fff;
+    }
+
+    .links {
+      margin-top: 20px;
+    }
+
+    .links a {
+      display: inline-block;
+      margin: 8px 10px;
+      color: white;
+      text-decoration: none;
+      font-size: 0.9em;
+      transition: 0.3s;
+      border-bottom: 1px solid transparent;
+    }
+
+    .links a:hover {
+      border-bottom: 1px solid #fff;
+    }
+
+    footer {
+      margin-top: 30px;
+      font-size: 0.8em;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Selamat Datang 👋</h2>
+    <p>Silakan login untuk melanjutkan ke sistem absensi siswa.</p>
+
+    <form action="dashboard.html" method="get">
+      <div class="form-group">
+        <label for="username">Nama Pengguna</label>
+        <input type="text" id="username" name="username" placeholder="Masukkan nama..." required>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Kata Sandi</label>
+        <input type="password" id="password" name="password" placeholder="Masukkan kata sandi..." required>
+      </div>
+
+      <button type="submit">Masuk</button>
+    </form>
+
+    <div class="links">
+      <a href="dashboard.html">Dashboard</a>
+    </div>
+
+    <footer>© 2025 Sistem Absensi Siswa</footer>
+  </div>
+</body>
+</html>
