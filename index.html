@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login / Home - Absensi Siswa</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Aman - Portal Absensi</title>
 
   <style>
-    /* Font modern */
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
     * {
@@ -18,125 +17,154 @@
 
     body {
       height: 100vh;
-      background: linear-gradient(135deg, #4e54c8, #8f94fb);
       display: flex;
       align-items: center;
       justify-content: center;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      overflow: hidden;
     }
 
-    .container {
+    .login-box {
       background: rgba(255, 255, 255, 0.15);
       border-radius: 20px;
       box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
       backdrop-filter: blur(8px);
       padding: 40px;
       width: 350px;
-      color: white;
+      color: #fff;
       text-align: center;
-      transition: all 0.3s ease-in-out;
+      animation: fadeIn 1s ease forwards;
+      transition: 0.3s;
     }
 
-    .container:hover {
-      transform: translateY(-5px);
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(30px);}
+      to {opacity: 1; transform: translateY(0);}
     }
 
     h2 {
-      font-size: 1.8em;
       font-weight: 600;
-      margin-bottom: 15px;
+      font-size: 1.8em;
+      margin-bottom: 10px;
     }
 
     p {
-      font-size: 0.95em;
+      font-size: 0.9em;
       margin-bottom: 25px;
-      opacity: 0.9;
+      opacity: 0.85;
     }
 
-    .form-group {
+    .input-group {
       text-align: left;
       margin-bottom: 20px;
     }
 
     label {
       font-size: 0.9em;
-      font-weight: 500;
+      display: block;
+      margin-bottom: 5px;
     }
 
     input {
       width: 100%;
-      padding: 10px 12px;
-      border-radius: 8px;
+      padding: 10px;
       border: none;
-      margin-top: 5px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.25);
+      color: white;
       outline: none;
+      font-size: 0.95em;
+      transition: background 0.3s;
+    }
+
+    input::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    input:focus {
+      background: rgba(255, 255, 255, 0.35);
     }
 
     button {
-      background: #fff;
-      color: #4e54c8;
+      width: 100%;
+      padding: 10px;
       border: none;
-      padding: 10px 20px;
       border-radius: 8px;
+      background: #fff;
+      color: #764ba2;
       font-weight: 600;
       cursor: pointer;
-      transition: 0.3s ease;
-      width: 100%;
+      font-size: 1em;
+      transition: 0.3s;
     }
 
     button:hover {
-      background: #4e54c8;
+      background: #764ba2;
       color: #fff;
     }
 
-    .links {
-      margin-top: 20px;
-    }
-
-    .links a {
-      display: inline-block;
-      margin: 8px 10px;
-      color: white;
-      text-decoration: none;
-      font-size: 0.9em;
-      transition: 0.3s;
-      border-bottom: 1px solid transparent;
-    }
-
-    .links a:hover {
-      border-bottom: 1px solid #fff;
+    .error {
+      margin-top: 15px;
+      color: #ffbaba;
+      background-color: rgba(255, 0, 0, 0.2);
+      padding: 8px;
+      border-radius: 6px;
+      display: none;
     }
 
     footer {
-      margin-top: 30px;
+      margin-top: 25px;
       font-size: 0.8em;
       opacity: 0.7;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>Selamat Datang 👋</h2>
-    <p>Silakan login untuk melanjutkan ke sistem absensi siswa.</p>
 
-    <form action="dashboard.html" method="get">
-      <div class="form-group">
-        <label for="username">Nama Pengguna</label>
-        <input type="text" id="username" name="username" placeholder="Masukkan nama..." required>
-      </div>
+  <div class="login-box">
+    <h2>🔒 Portal Aman</h2>
+    <p>Masukkan username & password Anda</p>
 
-      <div class="form-group">
-        <label for="password">Kata Sandi</label>
-        <input type="password" id="password" name="password" placeholder="Masukkan kata sandi..." required>
-      </div>
-
-      <button type="submit">Masuk</button>
-    </form>
-
-    <div class="links">
-      <a href="dashboard.html">Dashboard</a>
+    <div class="input-group">
+      <label for="username">Nama Pengguna</label>
+      <input type="text" id="username" placeholder="Masukkan username..." required>
     </div>
 
-    <footer>© 2025 Sistem Absensi Siswa</footer>
+    <div class="input-group">
+      <label for="password">Kata Sandi</label>
+      <input type="password" id="password" placeholder="Masukkan password..." required>
+    </div>
+
+    <button onclick="login()">Masuk</button>
+
+    <div class="error" id="errorMsg">⚠️ Username atau Password salah!</div>
+
+    <footer>© 2025 Sistem Absensi Aman</footer>
   </div>
+
+  <script>
+    // Username dan password yang benar
+    const validUser = "admin";
+    const validPass = "admin123";
+
+    function login() {
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const errorMsg = document.getElementById("errorMsg");
+
+      if (username === validUser && password === validPass) {
+        errorMsg.style.display = "none";
+        // Simpan sesi sementara agar halaman lain tahu login sudah benar
+        sessionStorage.setItem("isLoggedIn", "true");
+        window.location.href = "dashboard.html"; // arahkan ke halaman lain
+      } else {
+        errorMsg.style.display = "block";
+        setTimeout(() => {
+          errorMsg.style.display = "none";
+        }, 2500);
+      }
+    }
+  </script>
+
 </body>
 </html>
